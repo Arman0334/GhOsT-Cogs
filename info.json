@@ -1,0 +1,9 @@
+{
+    "name": "GhOsT-Cogs",
+    "author": [
+        "GhOsT#0001",
+    ],
+    "short": "Cogs for Red-DiscordBot v3",
+    "description": "Cogs for use on my Red-DiscordBot instance Jaaag",
+    "install_msg": "Thanks for installing!",
+}
