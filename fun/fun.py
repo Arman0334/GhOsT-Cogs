@@ -60,7 +60,11 @@ class Fun(commands.Cog):
                 title = post["title"]
                 url = post["url_overridden_by_dest"]
 
-        embed = discord.Embed(title=title).set_image(url=url)
+        embed = (
+            discord.Embed(title=title)
+            .set_image(url=url)
+            .set_footer(text="From {}".format(subreddit))
+        )
         await session.close()
         await ctx.send(embed=embed)
 
@@ -70,7 +74,8 @@ class Fun(commands.Cog):
     async def _memeset(self, ctx: commands.Context):
         """Base command for managing meme stuff :kappa:"""
 
-    @_memeset.command(name="subreddit")
+    @_memeset.command(name="subreddit", aliases=["sub"])
+    @commands.cooldown(1, 30, commands.BucketType.guild)
     async def _subreddit(
         self, ctx: commands.Context, *, subreddit: str
     ):
@@ -85,9 +90,9 @@ class Fun(commands.Cog):
         This will set the subreddit to r/dankmemes.
 
         Arguments:
-        - `<subreddit>` The name of the subreddit to be used.
-        only enter the subreddit name, don't enter the full
-        url or shit might break.
+        - `<subreddit>` The name of the subreddit to be used. Only
+        enter the subreddit name, don't enter the full url or shit
+        might break.
         """
         await self.config.guild(ctx.guild).subreddit.set(subreddit)
         await ctx.send(
