@@ -45,9 +45,9 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=["memes"])
     @commands.guild_only()
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 3, commands.BucketType.user)
     async def meme(self, ctx: commands.Context):
-        """Shows some memes from reddit."""
+        """Shows some quality memes from reddit."""
         subreddit = await self.config.guild(ctx.guild).subreddit()
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -81,7 +81,7 @@ class Fun(commands.Cog):
     ):
         """Set the subreddit for the meme command.
 
-        Default subreddit is r/memes.
+        Default subreddit is [r/memes](https://reddit.com/r/memes).
 
         Examples:
         - `[p]memeset subreddit r/memes`
