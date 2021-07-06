@@ -8,7 +8,7 @@ from redbot.core.bot import Red
 
 class Fun(commands.Cog):
     """
-    Some fun commandss...
+    Some fun commands...
     """
 
     __version__ = "0.0.1"
