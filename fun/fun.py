@@ -1,8 +1,9 @@
 import aiohttp
 import random
+from typing import Optional
 
 import discord
-from redbot.core import commands
+from redbot.core import Config, commands
 from redbot.core.bot import Red
 
 
@@ -22,6 +23,13 @@ class Fun(commands.Cog):
 
     def __init__(self, bot: Red) -> None:
         self.bot = bot
+        self.config = Config.get_conf(
+            self,
+            identifier=722168161713127435,
+            force_registration=True,
+        )
+        default_guild = {"subreddit": "r/memes"}
+        self.config.register_guild(**default_guild)
 
     async def red_get_data_for_user(self, *, user_id: int):
         """
@@ -40,9 +48,10 @@ class Fun(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def meme(self, ctx: commands.Context):
         """Shows some memes from reddit."""
+        subreddit = await self.config.guild(ctx.guild).subreddit()
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                "https://www.reddit.com/r/memes/new.json?sort=hot"
+                f"https://www.reddit.com/{subreddit}/new.json?sort=hot"
             ) as resp:
                 data = await resp.json()
                 data = data["data"]
@@ -54,3 +63,39 @@ class Fun(commands.Cog):
         embed = discord.Embed(title=title).set_image(url=url)
         await session.close()
         await ctx.send(embed=embed)
+
+    @commands.group(name="memeset")
+    @commands.guild_only()
+    @commands.admin()
+    async def _memeset(self, ctx: commands.Context):
+        """Base command for managing meme stuff :kappa:"""
+
+    @_memeset.command(name="subreddit")
+    async def _subreddit(
+        self, ctx: commands.Context, *, subreddit: str
+    ):
+        """Set the subreddit for the meme command.
+
+        Default subreddit is r/memes.
+
+        Examples:
+        - `[p]memeset subreddit r/memes`
+        This will set the subreddit to r/memes.
+        - `[p]memeset subreddit r/dankmemes`
+        This will set the subreddit to r/dankmemes.
+
+        Arguments:
+        - `<subreddit>` The name of the subreddit to be used.
+        only enter the subreddit name, don't enter the full
+        url or shit might break.
+        """
+        await self.config.guild(ctx.guild).subreddit.set(subreddit)
+        await ctx.send(
+            "The subreddit has sucessfully set to `{}`".format(
+                subreddit
+            )
+        )
+
+
+# This cog doesn't have much in it yet, but autoposting memes
+# are one of the things that I plan to add in the near future.
