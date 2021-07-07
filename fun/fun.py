@@ -52,7 +52,7 @@ class Fun(commands.Cog):
         subreddit = await self.config.guild(ctx.guild).subreddit()
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"https://www.reddit.com/{subreddit}/top.json?sort=hot"
+                f"https://www.reddit.com/{subreddit}/top.json?sort=new"
             ) as resp:
                 data = await resp.json()
                 data = data["data"]
