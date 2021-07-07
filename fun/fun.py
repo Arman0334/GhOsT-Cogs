@@ -52,7 +52,7 @@ class Fun(commands.Cog):
         subreddit = await self.config.guild(ctx.guild).subreddit()
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"https://www.reddit.com/{subreddit}/new.json?sort=hot"
+                f"https://www.reddit.com/{subreddit}/top.json?sort=hot"
             ) as resp:
                 data = await resp.json()
                 data = data["data"]
@@ -61,11 +61,12 @@ class Fun(commands.Cog):
                 title = post["title"]
                 url = post["url_overridden_by_dest"]
                 link_url = f'https://reddit.com{post["permalink"]}'
+                ups = post["ups"]
 
         embed = (
             discord.Embed(title=title, url=link_url)
             .set_image(url=url)
-            .set_footer(text="From {}".format(subreddit))
+            .set_footer(text="👍{}".format(ups))
         )
         await session.close()
         await ctx.send(embed=embed)
