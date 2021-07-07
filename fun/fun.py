@@ -63,6 +63,12 @@ class Fun(commands.Cog):
                 link_url = f'https://reddit.com{post["permalink"]}'
                 ups = post["ups"]
 
+        if post["over_18"] is True:
+            return await ctx.send(
+                "Cannot show content because it is nsfw,"
+                " try changing the subreddit."
+            )
+
         embed = (
             discord.Embed(title=title, url=link_url)
             .set_image(url=url)
