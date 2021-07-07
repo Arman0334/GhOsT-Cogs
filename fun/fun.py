@@ -1,3 +1,4 @@
+from os import link
 import aiohttp
 import random
 from typing import Optional
@@ -59,9 +60,10 @@ class Fun(commands.Cog):
                 post = random.choice(children)["data"]
                 title = post["title"]
                 url = post["url_overridden_by_dest"]
+                link_url = post["permalink"]
 
         embed = (
-            discord.Embed(title=title)
+            discord.Embed(title=title, url=link_url)
             .set_image(url=url)
             .set_footer(text="From {}".format(subreddit))
         )
