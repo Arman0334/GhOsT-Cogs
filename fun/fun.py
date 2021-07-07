@@ -62,11 +62,12 @@ class Fun(commands.Cog):
                 url = post["url_overridden_by_dest"]
                 link_url = f'https://reddit.com{post["permalink"]}'
                 ups = post["ups"]
+                downs = post["downs"]
 
         embed = (
             discord.Embed(title=title, url=link_url)
             .set_image(url=url)
-            .set_footer(text="👍{}".format(ups))
+            .set_footer(text="👍 {} | 👎 {}".format(ups, downs))
         )
         await session.close()
         await ctx.send(embed=embed)
