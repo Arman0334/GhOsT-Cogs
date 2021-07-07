@@ -81,7 +81,7 @@ class Fun(commands.Cog):
     @commands.guild_only()
     @commands.admin()
     async def _memeset(self, ctx: commands.Context):
-        """Base command for managing meme stuff :kappa:"""
+        """Base command for managing meme stuff."""
 
     @_memeset.command(name="subreddit", aliases=["sub"])
     @commands.cooldown(1, 30, commands.BucketType.guild)
