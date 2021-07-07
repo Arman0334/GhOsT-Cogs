@@ -60,7 +60,7 @@ class Fun(commands.Cog):
                 post = random.choice(children)["data"]
                 title = post["title"]
                 url = post["url_overridden_by_dest"]
-                link_url = post["permalink"]
+                link_url = f'https://reddit.com{post["permalink"]}'
 
         embed = (
             discord.Embed(title=title, url=link_url)
