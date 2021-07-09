@@ -62,6 +62,7 @@ class Fun(commands.Cog):
                 url = post["url_overridden_by_dest"]
                 link_url = f'https://reddit.com{post["permalink"]}'
                 ups = post["ups"]
+                comnts = post["num_comments"]
 
         if post["over_18"] is True:
             return await ctx.send(
@@ -72,7 +73,7 @@ class Fun(commands.Cog):
         embed = (
             discord.Embed(title=title, url=link_url)
             .set_image(url=url)
-            .set_footer(text="👍 {}".format(ups))
+            .set_footer(text="👍 {} | 💬 {}".format(ups, comnts))
         )
         await session.close()
         await ctx.send(embed=embed)
