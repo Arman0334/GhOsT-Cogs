@@ -1,4 +1,3 @@
-from os import link
 import aiohttp
 import random
 from typing import Optional
@@ -88,7 +87,9 @@ class Fun(commands.Cog):
 
     @_memeset.command(name="subreddit", aliases=["sub"])
     @commands.cooldown(1, 30, commands.BucketType.guild)
-    async def _subreddit(self, ctx: commands.Context, *, subreddit: str):
+    async def _subreddit(
+        self, ctx: commands.Context, *, subreddit: Optional[str]
+    ):
         """Set the subreddit for the meme command.
 
         Default subreddit is [r/memes](https://reddit.com/r/memes).
@@ -104,8 +105,18 @@ class Fun(commands.Cog):
         enter the subreddit name, don't enter the full url or shit
         might break.
         """
+        if subreddit is None:
+            await self.config.guild(ctx.guild).subreddit.set(
+                "r/memes"
+            )
+            return await ctx.send("Subreddit reset.")
+
         await self.config.guild(ctx.guild).subreddit.set(subreddit)
-        await ctx.send("The subreddit has sucessfully set to `{}`".format(subreddit))
+        await ctx.send(
+            "The subreddit has sucessfully set to `{}`".format(
+                subreddit
+            )
+        )
 
 
 # This cog doesn't have much in it yet, but autoposting memes
