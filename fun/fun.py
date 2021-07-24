@@ -24,6 +24,7 @@ class Fun(commands.Cog):
 
     def __init__(self, bot: Red) -> None:
         self.bot = bot
+        self.session = aiohttp.ClientSession()
         self.config = Config.get_conf(
             self,
             identifier=722168161713127435,
@@ -31,6 +32,9 @@ class Fun(commands.Cog):
         )
         default_guild = {"subreddit": "r/memes"}
         self.config.register_guild(**default_guild)
+
+    def cog_unload(self):  # Thanks MAX
+        self.bot.loop.create_task(self.session.close())
 
     async def red_get_data_for_user(self, *, user_id: int):
         """
@@ -50,24 +54,23 @@ class Fun(commands.Cog):
     async def meme(self, ctx: commands.Context):
         """Shows some quality memes from reddit."""
         subreddit = await self.config.guild(ctx.guild).subreddit()
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                f"https://www.reddit.com/{subreddit}/top.json?sort=new"
-            ) as resp:
-                data = await resp.json()
-                data = data["data"]
-                children = data["children"]
-                post = random.choice(children)["data"]
-                title = post["title"]
-                url = post["url_overridden_by_dest"]
-                link_url = f'https://reddit.com{post["permalink"]}'
-                ups = post["ups"]
-                comnts = post["num_comments"]
+        async with self.session.get(
+            f"https://www.reddit.com/{subreddit}/top.json?sort=new"
+        ) as resp:
+            data = await resp.json()
+            data = data["data"]
+            children = data["children"]
+            post = random.choice(children)["data"]
+            title = post["title"]
+            url = post["url_overridden_by_dest"]
+            link_url = f'https://reddit.com{post["permalink"]}'
+            ups = post["ups"]
+            comnts = post["num_comments"]
 
         if post["over_18"] is True:
             return await ctx.send(
                 "Cannot show content because it is nsfw,"
-                " try changing the subreddit."
+                " try changing the subreddit lol."
             )
 
         embed = (
@@ -75,7 +78,6 @@ class Fun(commands.Cog):
             .set_image(url=url)
             .set_footer(text="👍 {} | 💬 {}".format(ups, comnts))
         )
-        await session.close()
         await ctx.send(embed=embed)
 
     @commands.group(name="memeset")
@@ -86,9 +88,7 @@ class Fun(commands.Cog):
 
     @_memeset.command(name="subreddit", aliases=["sub"])
     @commands.cooldown(1, 30, commands.BucketType.guild)
-    async def _subreddit(
-        self, ctx: commands.Context, *, subreddit: str
-    ):
+    async def _subreddit(self, ctx: commands.Context, *, subreddit: str):
         """Set the subreddit for the meme command.
 
         Default subreddit is [r/memes](https://reddit.com/r/memes).
@@ -105,11 +105,7 @@ class Fun(commands.Cog):
         might break.
         """
         await self.config.guild(ctx.guild).subreddit.set(subreddit)
-        await ctx.send(
-            "The subreddit has sucessfully set to `{}`".format(
-                subreddit
-            )
-        )
+        await ctx.send("The subreddit has sucessfully set to `{}`".format(subreddit))
 
 
 # This cog doesn't have much in it yet, but autoposting memes
