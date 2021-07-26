@@ -47,10 +47,10 @@ class Fun(commands.Cog):
         """
         return
 
-    @commands.command(aliases=["memes"])
+    @commands.command(name="meme", aliases=["memes"])
     @commands.guild_only()
     @commands.cooldown(1, 3, commands.BucketType.user)
-    async def meme(self, ctx: commands.Context):
+    async def _meme(self, ctx: commands.Context):
         """Shows some quality memes from reddit."""
         subreddit = await self.config.guild(ctx.guild).subreddit()
         async with self.session.get(
