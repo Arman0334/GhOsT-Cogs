@@ -1,7 +1,7 @@
-import aiohttp
 import random
 from typing import Optional
 
+import aiohttp
 import discord
 from redbot.core import Config, commands
 from redbot.core.bot import Red
