@@ -12,7 +12,7 @@ class Fun(commands.Cog):
     Some fun commands...
     """
 
-    __version__ = "0.0.1"
+    __version__ = "0.2.3"
 
     def format_help_for_context(self, ctx: commands.Context):
         """
