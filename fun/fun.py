@@ -12,7 +12,7 @@ class Fun(commands.Cog):
     Some fun commands...
     """
 
-    __version__ = "0.2.3"
+    __version__ = "0.2.4"
 
     def format_help_for_context(self, ctx: commands.Context):
         """
@@ -54,7 +54,7 @@ class Fun(commands.Cog):
         """Shows some quality memes from reddit."""
         subreddit = await self.config.guild(ctx.guild).subreddit()
         async with self.session.get(
-            f"https://www.reddit.com/{subreddit}/top.json?sort=new"
+            f"https://api.reddit.com/r/{subreddit}"
         ) as resp:
             data = await resp.json()
             data = data["data"]
