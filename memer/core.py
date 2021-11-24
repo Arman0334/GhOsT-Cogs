@@ -1,7 +1,7 @@
 BASE_URL = "https://api.martinebot.com/"
 
 import random
-from datetime import fromtimestamp
+from datetime import datetime as dt
 
 import aiohttp
 import discord
@@ -69,7 +69,7 @@ class Memer(commands.Cog):
                     embed = discord.Embed(
                         title=meme.get("title"),
                         url=meme.get("post_url"),
-                        timestamp=fromtimestamp(meme.get("created_at")),
+                        timestamp=dt.fromtimestamp(meme.get("created_at")),
                     )
                     embed.set_image(url=meme.get("image_url"))
                     embed.set_footer(
