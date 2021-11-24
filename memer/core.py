@@ -20,7 +20,7 @@ class Memer(commands.Cog):
         self.bot = bot
         self.session = aiohttp.ClientSession()
 
-    def cog_unload(self) -> None: 
+    def cog_unload(self) -> None:
         # Thanks MAX for telling me about this
         self.bot.loop.create_task(self.session.close())
 
@@ -76,9 +76,9 @@ class Memer(commands.Cog):
                     embed.set_image(url=meme.get("image_url"))
                     embed.set_footer(
                         text="👍 {upvotes} 👎 {downvotes} 💬 {comments}".format(
-                            upvotes=meme.get("upvotes"), 
-                            downvotes=meme.get("downvotes"), 
-                            comments=meme.get("comments")
+                            upvotes=meme.get("upvotes"),
+                            downvotes=meme.get("downvotes"),
+                            comments=meme.get("comments"),
                         )
                     )
 
