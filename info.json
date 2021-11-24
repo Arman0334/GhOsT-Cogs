@@ -1,9 +1,13 @@
 {
-    "name": "GhOsT-Cogs",
+    "name": "Ghost-Cogs",
     "author": [
-        "GhOsT#0001"
+        "Arman0334 (GhOsT#0231)"
     ],
-    "short": "Cogs for Red-DiscordBot v3",
-    "description": "Cogs for use on my Red-DiscordBot instance Jaaag",
-    "install_msg": "Thanks for installing, have fun!"
+    "short": "Collection of fun and utility cogs for Red.",
+    "description": "This repo has some fun and utility cogs for Red-DiscordBot.",
+    "install_msg": "Thanks for installing this repo!",
+    "tags": [
+        "utility",
+        "fun"
+    ]
 }
