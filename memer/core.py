@@ -2,6 +2,7 @@ BASE_URL = "https://api.martinebot.com/"
 
 import random
 from datetime import datetime as dt
+from typing import Any, Dict
 
 import aiohttp
 import discord
