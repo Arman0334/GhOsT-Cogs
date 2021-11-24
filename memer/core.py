@@ -14,7 +14,7 @@ class Memer(commands.Cog):
     """Get random memes from reddit."""
 
     __author__ = "Arman0334 (GhOsT#0231)"
-    __version__ = "0.3.1"
+    __version__ = "0.3.2"
 
     def __init__(self, bot: Red) -> None:
         self.bot = bot
@@ -63,7 +63,7 @@ class Memer(commands.Cog):
                     await ctx.reply(
                         (
                             "I couldn't send the meme because it contains NSFW"
-                            "content and this channel is not marked as NSFW."
+                            " content and this channel is not marked as NSFW."
                         )
                     )
                     return
