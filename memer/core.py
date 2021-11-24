@@ -14,13 +14,14 @@ class Memer(commands.Cog):
     """Get random memes from reddit."""
 
     __author__ = "Arman0334 (GhOsT#0231)"
-    __version__ = "0.3.0"
+    __version__ = "0.3.1"
 
     def __init__(self, bot: Red) -> None:
         self.bot = bot
         self.session = aiohttp.ClientSession()
 
-    def cog_unload(self): # Thanks MAX for telling me about this
+    def cog_unload(self) -> None: 
+        # Thanks MAX for telling me about this
         self.bot.loop.create_task(self.session.close())
 
     def format_help_for_context(self, ctx: commands.Context) -> str:
