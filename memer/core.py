@@ -1,8 +1,7 @@
 BASE_URL = "https://api.martinebot.com/"
 
-import random
 from datetime import datetime as dt
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import aiohttp
 import discord
@@ -15,7 +14,7 @@ class Memer(commands.Cog):
     """Get random memes from reddit."""
 
     __author__ = "Arman0334 (GhOsT#0231)"
-    __version__ = "0.3.3"
+    __version__ = "1.0.0"
 
     def __init__(self, bot: Red) -> None:
         self.bot = bot
@@ -24,6 +23,7 @@ class Memer(commands.Cog):
             self, identifier=722168161713127435, force_registration=True
         )
 
+        self.config.register_global(guilds=[])
         self.config.register_guild(channel=None)
 
         self.autoposter.start()
@@ -86,12 +86,35 @@ class Memer(commands.Cog):
 
     @tasks.loop(minutes=5)
     async def autoposter(self) -> None:
-        """Automatically posts memes."""
-        pass
+        """Automatically posts memes to the set channel every 5 minutes."""
+        all_guilds: list = await self.config.guilds()
+        if not all_guilds:
+            return
+
+        for id in all_guilds:
+            guild: discord.Guild  = await self.bot.get_guild(id)
+            config: int = await self.config.guild(guild).channel()
+            channel: discord.TextChannel = guild.get_channel(config)
+            webhooks = await channel.webhooks()
+            if not webhooks:
+                webhook = await channel.create_webhook(name="Memer")
+            else:
+                usable_webhooks = [hook for hook in webhooks if hook.token]
+                # Usable webhook logic from kato's onconnect cog
+                if not usable_webhooks:
+                    webhook = await channel.create_webhook(name="Memer")
+                else:
+                    webhook = usable_webhooks[0]
+
+            await webhook.send(
+                username=self.bot.user.display_name,
+                avatar_url=self.bot.user.avatar_url,
+                embed=await self.get_meme(channel=channel)
+            )
 
     @autoposter.before_loop
     async def before_autoposter(self) -> None:
-        """Wait for red to start up properly."""
+        """Wait for red to get ready."""
         await self.bot.wait_until_red_ready()
 
     @commands.command(name="meme", aliases=["memes"])
@@ -116,9 +139,29 @@ class Memer(commands.Cog):
     @_memeset.command(name="channel")
     @commands.max_concurrency(number=1, per=commands.BucketType.guild)
     async def _channel(
-        self, ctx: commands.Context, channel: discord.TextChannel
+        self, 
+        ctx: commands.Context, 
+        channel: Optional[discord.TextChannel] = None
     ) -> None:
-        """Set the channel for auto posting memes."""
+        """Set the channel for auto posting memes.
+
+        **Examples:**
+        - `[p]memeset channel #testing`
+        This will set the channel to #testing.
+        - `[p]memeset channel 133251234164375552`
+        This wil set the channel to #testing.
+
+        **Arguments:**
+        - `[channel]` - The channel to auto post memes to. Leave blank to use 
+        the current channel.
+        """
+        channel = channel or ctx.channel
+
+        all_guilds_config: list = await self.config.guilds()
+        if ctx.guild.id not in all_guilds_config:
+            all_guilds_config.append(ctx.guild.id)
+            await self.config.guilds.set(all_guilds_config)
+
         await self.config.guild(ctx.guild).channel.set(channel.id)
         await ctx.tick()
 
@@ -126,13 +169,18 @@ class Memer(commands.Cog):
     @commands.max_concurrency(number=1, per=commands.BucketType.guild)
     async def _clear_channel(self, ctx: commands.Context) -> None:
         """clear the channel for auto posting memes."""
-        config = await self.config.guild(ctx.guild).channel()
-        if not config:
+        channel_config = await self.config.guild(ctx.guild).channel()
+        if not channel_config:
             try:
                 await ctx.reply("No channel has been set up to clear!")
             except discord.HTTPExecption:
                 await ctx.send("No channel has been set up to clear!")
             return
         else:
-            await self.config.guild(ctx.guild).channel.set(None)
+            all_guilds_config: list = await self.config.guilds()
+            if ctx.guild.id in all_guilds_config:
+                all_guilds_config.remove(ctx.guild.id)
+                await self.config.guilds.set(all_guilds_config)
+
+            await self.config.guild(ctx.guild).channel.clear()
             await ctx.tick()
