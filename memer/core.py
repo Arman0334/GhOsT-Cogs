@@ -54,6 +54,7 @@ class Memer(commands.Cog):
                 embed = discord.Embed(
                     title="Error!",
                     description="Something went wrong while contacting the API",
+                    colour=discord.Colour.red()
                 )
             else:
                 data: dict = await resp.json()
@@ -65,6 +66,7 @@ class Memer(commands.Cog):
                             "This meme is marked as nsfw and this channel isnt"
                             " nsfw."
                         ),
+                        colour=discord.Colour.red()
                     )
                 else:
                     embed = discord.Embed(
@@ -74,9 +76,8 @@ class Memer(commands.Cog):
                     )
                     embed.set_image(url=meme.get("image_url"))
                     embed.set_footer(
-                        text="👍 {upvotes} 👎 {downvotes} 💬 {comments}".format(
+                        text="👍 {upvotes} | 💬 {comments}".format(
                             upvotes=meme.get("upvotes"),
-                            downvotes=meme.get("downvotes"),
                             comments=meme.get("comments"),
                         )
                     )
@@ -100,13 +101,11 @@ class Memer(commands.Cog):
 
         Memes are taken from https://api.martinebot.com/.
         """
+        meme = await self.get_meme(channel=ctx.channel)
         try:
-            await ctx.reply(
-                embed=await self.get_meme(channel=ctx.channel),
-                mention_author=False,
-            )
+            await ctx.reply(embed=meme, mention_author=False)
         except discord.HTTPException:
-            await ctx.send(embed=await self.get_meme(channel=ctx.channel))
+            await ctx.send(embed=meme)
 
     @commands.group(name="memeset")
     @commands.guild_only()
