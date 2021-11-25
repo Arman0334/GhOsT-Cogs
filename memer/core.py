@@ -91,8 +91,8 @@ class Memer(commands.Cog):
         if not all_guilds:
             return
 
-        for id in all_guilds:
-            guild: discord.Guild = self.bot.get_guild(id)
+        for guild_id in all_guilds:
+            guild: discord.Guild = self.bot.get_guild(guild_id)
             config: int = await self.config.guild(guild).channel()
             channel: discord.TextChannel = guild.get_channel(config)
             meme = await self.get_meme(channel=channel)
@@ -164,7 +164,6 @@ class Memer(commands.Cog):
             await ctx.reply(
                 "I cannot send webhooks in {}!".format(channel.mention)
             )
-            return
         else:
             all_guilds_config: list = await self.config.guilds()
             if ctx.guild.id not in all_guilds_config:
@@ -184,7 +183,6 @@ class Memer(commands.Cog):
                 await ctx.reply("No channel has been set up to clear!")
             except discord.HTTPExecption:
                 await ctx.send("No channel has been set up to clear!")
-            return
         else:
             all_guilds_config: list = await self.config.guilds()
             if ctx.guild.id in all_guilds_config:
