@@ -92,7 +92,7 @@ class Memer(commands.Cog):
             return
 
         for id in all_guilds:
-            guild: discord.Guild  = await self.bot.get_guild(id)
+            guild: discord.Guild = await self.bot.get_guild(id)
             config: int = await self.config.guild(guild).channel()
             channel: discord.TextChannel = guild.get_channel(config)
             webhooks = await channel.webhooks()
@@ -109,7 +109,7 @@ class Memer(commands.Cog):
             await webhook.send(
                 username=self.bot.user.display_name,
                 avatar_url=self.bot.user.avatar_url,
-                embed=await self.get_meme(channel=channel)
+                embed=await self.get_meme(channel=channel),
             )
 
     @autoposter.before_loop
@@ -139,9 +139,9 @@ class Memer(commands.Cog):
     @_memeset.command(name="channel")
     @commands.max_concurrency(number=1, per=commands.BucketType.guild)
     async def _channel(
-        self, 
-        ctx: commands.Context, 
-        channel: Optional[discord.TextChannel] = None
+        self,
+        ctx: commands.Context,
+        channel: Optional[discord.TextChannel] = None,
     ) -> None:
         """Set the channel for auto posting memes.
 
@@ -152,7 +152,7 @@ class Memer(commands.Cog):
         This wil set the channel to #testing.
 
         **Arguments:**
-        - `[channel]` - The channel to auto post memes to. Leave blank to use 
+        - `[channel]` - The channel to auto post memes to. Leave blank to use
         the current channel.
         """
         channel = channel or ctx.channel
