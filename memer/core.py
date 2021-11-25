@@ -92,7 +92,7 @@ class Memer(commands.Cog):
             return
 
         for id in all_guilds:
-            guild: discord.Guild  = self.bot.get_guild(id)
+            guild: discord.Guild = self.bot.get_guild(id)
             config: int = await self.config.guild(guild).channel()
             channel: discord.TextChannel = guild.get_channel(config)
             webhooks = await channel.webhooks()
