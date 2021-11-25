@@ -54,7 +54,7 @@ class Memer(commands.Cog):
                 embed = discord.Embed(
                     title="Error!",
                     description="Something went wrong while contacting the API",
-                    colour=discord.Colour.red()
+                    colour=discord.Colour.red(),
                 )
             else:
                 data: dict = await resp.json()
@@ -66,7 +66,7 @@ class Memer(commands.Cog):
                             "This meme is marked as nsfw and this channel isnt"
                             " nsfw."
                         ),
-                        colour=discord.Colour.red()
+                        colour=discord.Colour.red(),
                     )
                 else:
                     embed = discord.Embed(
