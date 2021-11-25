@@ -53,18 +53,18 @@ class Memer(commands.Cog):
             if resp.status != 200:
                 embed = discord.Embed(
                     title="Error!",
-                    description="Something went wrong while contacting the API"
+                    description="Something went wrong while contacting the API",
                 )
             else:
                 data: dict = await resp.json()
-                meme: dict = data.get("data") 
+                meme: dict = data.get("data")
                 if meme.get("nsfw") is True and not channel.is_nsfw():
                     embed = discord.Embed(
                         title="Error!",
                         description=(
                             "This meme is marked as nsfw and this channel isnt"
                             " nsfw."
-                        )
+                        ),
                     )
                 else:
                     embed = discord.Embed(
@@ -77,7 +77,7 @@ class Memer(commands.Cog):
                         text="👍 {upvotes} 👎 {downvotes} 💬 {comments}".format(
                             upvotes=meme.get("upvotes"),
                             downvotes=meme.get("downvotes"),
-                            comments=meme.get("comments")
+                            comments=meme.get("comments"),
                         )
                     )
 
@@ -102,8 +102,8 @@ class Memer(commands.Cog):
         """
         try:
             await ctx.reply(
-                embed=await self.get_meme(channel=ctx.channel), 
-                mention_author=False
+                embed=await self.get_meme(channel=ctx.channel),
+                mention_author=False,
             )
         except discord.HTTPException:
             await ctx.send(embed=await self.get_meme(channel=ctx.channel))
