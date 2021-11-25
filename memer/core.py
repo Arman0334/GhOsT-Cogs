@@ -160,14 +160,19 @@ class Memer(commands.Cog):
         the current channel.
         """
         channel = channel or ctx.channel
+        if not ctx.guild.me.permissions_in(channel).manage_webhooks:
+            await ctx.reply(
+                "I cannot send webhooks in {}!".format(channel.mention)
+            )
+            return
+        else:
+            all_guilds_config: list = await self.config.guilds()
+            if ctx.guild.id not in all_guilds_config:
+                all_guilds_config.append(ctx.guild.id)
+                await self.config.guilds.set(all_guilds_config)
 
-        all_guilds_config: list = await self.config.guilds()
-        if ctx.guild.id not in all_guilds_config:
-            all_guilds_config.append(ctx.guild.id)
-            await self.config.guilds.set(all_guilds_config)
-
-        await self.config.guild(ctx.guild).channel.set(channel.id)
-        await ctx.tick()
+            await self.config.guild(ctx.guild).channel.set(channel.id)
+            await ctx.tick()
 
     @_memeset.command(name="clearchannel", aliases=["clear"])
     @commands.max_concurrency(number=1, per=commands.BucketType.guild)
