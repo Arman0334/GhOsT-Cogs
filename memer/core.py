@@ -92,25 +92,29 @@ class Memer(commands.Cog):
             return
 
         for id in all_guilds:
-            guild: discord.Guild  = self.bot.get_guild(id)
+            guild: discord.Guild = self.bot.get_guild(id)
             config: int = await self.config.guild(guild).channel()
             channel: discord.TextChannel = guild.get_channel(config)
-            webhooks = await channel.webhooks()
-            if not webhooks:
-                webhook = await channel.create_webhook(name="Memer")
-            else:
-                usable_webhooks = [hook for hook in webhooks if hook.token]
-                # Usable webhook logic from kato's onconnect cog
-                if not usable_webhooks:
+            meme = await self.get_meme(channel=channel)
+            if guild.me.permissions_in(channel).manage_webhooks:
+                webhooks = await channel.webhooks()
+                if not webhooks:
                     webhook = await channel.create_webhook(name="Memer")
                 else:
-                    webhook = usable_webhooks[0]
+                    usable_webhooks = [hook for hook in webhooks if hook.token]
+                    # Usable webhook logic based on kato's onconnect cog
+                    if not usable_webhooks:
+                        webhook = await channel.create_webhook(name="Memer")
+                    else:
+                        webhook = usable_webhooks[0]
 
-            await webhook.send(
-                username=self.bot.user.display_name,
-                avatar_url=self.bot.user.avatar_url,
-                embed=await self.get_meme(channel=channel),
-            )
+                await webhook.send(
+                    username=self.bot.user.display_name,
+                    avatar_url=self.bot.user.avatar_url,
+                    embed=meme,
+                )
+            else:
+                await channel.send(embed=meme)
 
     @autoposter.before_loop
     async def before_autoposter(self) -> None:
