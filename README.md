@@ -75,7 +75,7 @@
         memer
       </td>
       <td>
-        0.3.2
+        0.3.3
       </td>
       <td>
         Arman0334 (GhOsT#0231)

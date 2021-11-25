@@ -1,6 +1,3 @@
-import json
-from pathlib import Path
-
 from redbot.core.bot import Red
 from redbot.core.utils import get_end_user_data_statement
 

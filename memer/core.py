@@ -14,7 +14,7 @@ class Memer(commands.Cog):
     """Get random memes from reddit."""
 
     __author__ = "Arman0334 (GhOsT#0231)"
-    __version__ = "0.3.2"
+    __version__ = "0.3.3"
 
     def __init__(self, bot: Red) -> None:
         self.bot = bot
