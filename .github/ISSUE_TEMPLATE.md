@@ -1,1 +1,1 @@
-### Describe the issue
+### Description of the issue
