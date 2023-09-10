@@ -19,7 +19,6 @@
     <img src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336" alt="Imports: Isort">
   </a>
   <a href="https://github.com/Arman0334/Ghost-Cogs/actions">
-    <img src="https://img.shields.io/github/workflow/status/Arman0334/Ghost-Cogs/reformat?label=tests" alt="GitHub Actions">
     <img src="https://img.shields.io/github/actions/workflow/status/Arman0334/Ghost-Cogs/test.yml?branch=main" alt="GitHub Actions">
   </a>
 </p>
