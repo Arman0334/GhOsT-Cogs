@@ -20,6 +20,7 @@
   </a>
   <a href="https://github.com/Arman0334/Ghost-Cogs/actions">
     <img src="https://img.shields.io/github/workflow/status/Arman0334/Ghost-Cogs/reformat?label=tests" alt="GitHub Actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/Arman0334/Ghost-Cogs/test.yml?branch=main" alt="GitHub Actions">
   </a>
 </p>
 
